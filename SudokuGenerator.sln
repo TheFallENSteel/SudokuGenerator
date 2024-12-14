@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35431.28
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SudokuGenerator", "SudokuGenerator\SudokuGenerator.csproj", "{4103D625-614F-46B0-85C6-BB6642D61105}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SudokuSolver", "SudokuSolver\SudokuSolver\SudokuSolver.csproj", "{18CF5E98-B984-44D3-916F-A7A6E4548D89}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDFGenerator", "PDFGenerator\PDFGenerator.csproj", "{DE942036-75C8-4846-919D-6316611A0E77}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4103D625-614F-46B0-85C6-BB6642D61105}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4103D625-614F-46B0-85C6-BB6642D61105}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4103D625-614F-46B0-85C6-BB6642D61105}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4103D625-614F-46B0-85C6-BB6642D61105}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18CF5E98-B984-44D3-916F-A7A6E4548D89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18CF5E98-B984-44D3-916F-A7A6E4548D89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18CF5E98-B984-44D3-916F-A7A6E4548D89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18CF5E98-B984-44D3-916F-A7A6E4548D89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE942036-75C8-4846-919D-6316611A0E77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE942036-75C8-4846-919D-6316611A0E77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE942036-75C8-4846-919D-6316611A0E77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE942036-75C8-4846-919D-6316611A0E77}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3FD031D2-E3A4-4B35-8E22-EDCE288DE03F}
+	EndGlobalSection
+EndGlobal
