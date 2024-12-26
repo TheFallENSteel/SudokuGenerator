@@ -13,7 +13,6 @@ namespace SudokuGenerator
     public class GenerateArgs
     {
         public int GenerateCount { get; } = 6;
-        public int Seed { get; } = Environment.TickCount;
         public int Difficulty { get; } = Environment.TickCount;
         public GenerateArgs(List<string> rawArgs)
         {
@@ -25,14 +24,8 @@ namespace SudokuGenerator
             }
             if (rawArgs.Count >= 2) 
             { 
-                if (!int.TryParse(rawArgs[1], out int generateCount)) throw new ArgumentException("Invalid RowCount argument", nameof(GenerateCount));
+                if (!int.TryParse(rawArgs[1], out int generateCount)) throw new ArgumentException("Invalid GenerateCount argument", nameof(GenerateCount));
                 GenerateCount = generateCount;
-            }
-            if (rawArgs.Count >= 3)
-            {
-                if (!int.TryParse(rawArgs[2], out int seed)) throw new ArgumentException("Invalid Column argument", nameof(Seed));
-                Seed = seed;
-
             }
         }
     }

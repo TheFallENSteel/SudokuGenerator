@@ -10,6 +10,7 @@ namespace SudokuSolver
     {
         public readonly int x;
         public readonly int y;
+        public int Index => x + y * 9;
         public List<int> Possibilities { get; private set; } = [1, 2, 3, 4, 5, 6, 7, 8, 9];
         private List<Container> Containers { get; } = [];
         public bool IsDefinitive => Possibilities.Count == 0;
@@ -21,7 +22,7 @@ namespace SudokuSolver
             this.y = y;
         }
 
-        public void RemoveValue(int value)
+        public void RemoveValue()
         {
             Possibilities = [1, 2, 3, 4, 5, 6, 7, 8, 9];
             for (int i = 0; i < Containers.Count; i++)
@@ -44,18 +45,24 @@ namespace SudokuSolver
         }
         public bool TrySetValue(int value) 
         {
-            if (value != 0 && cellValue == 0 && Possibilities.Contains(value)) 
+            if (value != 0 && cellValue == 0 && Possibilities.Contains(value))
             {
-                Value = value;
-                Possibilities.Clear();
-                for (int i = 0; i < Containers.Count; i++)
-                {
-                    Containers[i].NumberSet(value);
-                }
+                RemovePossibilities(value);
                 return true;
             }
             return value == 0;
         }
+
+        private void RemovePossibilities(int value)
+        {
+            Value = value;
+            Possibilities.Clear();
+            for (int i = 0; i < Containers.Count; i++)
+            {
+                Containers[i].NumberSet(value);
+            }
+        }
+
         public bool ConfirmDefinitiveValue()
         {
             if (Possibilities.Count == 1)

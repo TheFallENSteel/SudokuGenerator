@@ -11,6 +11,16 @@ namespace SudokuGenerator
 {
     public static class SudokuGrid
     {
+        /// <summary>
+        /// Preparing document pages for drawing the grid of sudokus.
+        /// </summary>
+        /// <param name="sudoku"></param>
+        /// <param name="offset"></param>
+        /// <param name="columnCount">Number of sudokus in row.</param>
+        /// <param name="rowCount">Number of sudokus in column.</param>
+        /// <param name="rectangle">Area for the drawing of sudokus.</param>
+        /// <param name="spaceBetween">Gap between each sudoku instances.</param>
+        /// <returns>Returns <see cref="IPrintableSudokuDrawer"/> instance to be used for drawing.</returns>
         public static IPrintableSudokuDrawer[] GenerateSudokuGrid(IPrintableSudoku[] sudoku, int offset, int columnCount, int rowCount, XPoint rectangle, XPoint spaceBetween) 
         {
             IPrintableSudokuDrawer[] returnValue = new IPrintableSudokuDrawer[Math.Min(columnCount * rowCount, sudoku.Length - offset)];
