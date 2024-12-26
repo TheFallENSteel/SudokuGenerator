@@ -16,11 +16,11 @@ namespace SudokuSolver
 
         public SudokuData()
         {
-            GenerateCells();
+            GenerateGrid();
         }
         public SudokuData(int[] data, bool toBeValidated = false)
         {
-            GenerateCells();
+            GenerateGrid();
             if (!toBeValidated && !SetData(data)) 
             {
                 throw new Exception("Invalid Sudoku data");
@@ -44,7 +44,7 @@ namespace SudokuSolver
             return true;
         }
 
-        public int[] GetData() 
+        public int[] GetRawData() 
         { 
             return Cells.Select(cell => cell.Value).ToArray();
         }
@@ -78,6 +78,27 @@ namespace SudokuSolver
             return false;
         }
 
+        public bool CheckForPointing() 
+        {
+            foreach (var square in SquareContainers)
+            {
+                foreach (var pos in square.Possibilities)
+                {
+                    List<Cell> cells = new List<Cell>(3);
+                    Container rowColumn = null;
+                    foreach (var cell in square.Cells)
+                    {
+                        if (cells.Count != 0 /* && Is not in same row or column*/) break; //TODO: Implement
+                        else 
+                        {
+                            lastCell = cell;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
         private static int ValidateValue(int data)
         {
             if (data < 0 || data > Size) throw new Exception("Invalid number in sudoku");
@@ -88,7 +109,7 @@ namespace SudokuSolver
             if (dataLength != Size * Size) throw new Exception("Invalid size of sudoku");
         }
 
-        private void GenerateCells()
+        private void GenerateGrid()
         {
             for (int i = 0; i < Cells.Length; i++)
             {
@@ -133,12 +154,12 @@ namespace SudokuSolver
             return Enumerable.Range(0, Size).Select(n => GetCell(squareX * SquareSize + n % SquareSize, squareY * SquareSize + n / SquareSize)).ToArray();
         }
 
-        public Cell LeastVariableUnsetCell() 
+        public Cell? LeastVariableUnsetCell() 
         {
             Cell? returnValue = null;
             for (int i = 1; i < Cells.Length; i++)
             {
-                if (returnValue == null || (Cells[i].Possibilities.Count < returnValue.Possibilities.Count && Cells[i].Possibilities.Count > 1)) returnValue = Cells[i];
+                if (Cells[i].Possibilities.Count > 1 && (returnValue == null || (Cells[i].Possibilities.Count < returnValue.Possibilities.Count))) returnValue = Cells[i];
             }
             return returnValue;
         }

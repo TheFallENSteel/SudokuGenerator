@@ -50,7 +50,7 @@ namespace PDFGenerator
             {
                 DrawSudoku(graphics, settings, format, printableSudokuDrawers[i]);
             }
-            DrawHeader(graphics, settings, settings.Font, format, page.Width.Point);
+            DrawHeader(graphics, settings, settings.HeaderFont, format, page.Width.Point);
         }
 
         private static void DrawSudoku(XGraphics graphics, DocumentSettings settings, XStringFormat format, IPrintableSudokuDrawer sudokuDrawer)
@@ -58,7 +58,7 @@ namespace PDFGenerator
             double size = Math.Min(sudokuDrawer.RectSize.X, sudokuDrawer.RectSize.Y);
             double normalStep = (size / 9);
             DrawGrid(graphics, settings, sudokuDrawer, size, normalStep);
-            DrawNumbers(graphics, settings, sudokuDrawer, normalStep, settings.Font, format);
+            DrawNumbers(graphics, settings, sudokuDrawer, normalStep, format);
         }
 
 
@@ -86,13 +86,14 @@ namespace PDFGenerator
             }
         }
 
-        private static void DrawNumbers(XGraphics graphics, DocumentSettings settings, IPrintableSudokuDrawer sudokuDrawer, double step, XFont font, XStringFormat format)
+        private static void DrawNumbers(XGraphics graphics, DocumentSettings settings, IPrintableSudokuDrawer sudokuDrawer, double step, XStringFormat format)
         {
+            XFont numberFont = new XFont(settings.FontFamilyName, ((step / 2)));
             for (int j = 0; j < 9; j++)
             {
                 for (int i = 0; i < 9; i++)
                 {
-                    DrawNumber(graphics, settings, sudokuDrawer, step, font, format, i, j);
+                    DrawNumber(graphics, settings, sudokuDrawer, step, format, numberFont, i, j);
                 }
             }
         }
@@ -115,7 +116,7 @@ namespace PDFGenerator
                 settings.HeaderFont, settings.FontBrush, location, format);
         }
 
-        private static void DrawNumber(XGraphics graphics, DocumentSettings settings, IPrintableSudokuDrawer sudokuDrawer, double step, XFont font, XStringFormat format, int i, int j)
+        private static void DrawNumber(XGraphics graphics, DocumentSettings settings, IPrintableSudokuDrawer sudokuDrawer, double step, XStringFormat format, XFont numberFont, int i, int j)
         {
             XPoint location = new XPoint(sudokuDrawer.Offset.X + i * step + step / 2, sudokuDrawer.Offset.Y + j * step + step / 2);
             int number = sudokuDrawer.Sudoku.Data[i + j * sudokuDrawer.Sudoku.Size];
@@ -123,7 +124,7 @@ namespace PDFGenerator
             {
                 graphics.DrawString(
                     sudokuDrawer.Sudoku.Data[i + j * sudokuDrawer.Sudoku.Size].ToString(),
-                    font, settings.FontBrush, location, format);
+                    numberFont, settings.FontBrush, location, format);
             }
         }
         private static void DrawWhiteSpace(XGraphics graphics, IPrintableSudokuDrawer sudokuDrawer, double step, int i, int j)

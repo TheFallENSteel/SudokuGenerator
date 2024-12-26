@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.VisualBasic;
 
 
 namespace SudokuGenerator
@@ -16,6 +17,7 @@ namespace SudokuGenerator
     public class Program
     {
         static List<Sudoku> SudokuBuffer { get; } = new List<Sudoku>();
+        static Stack<Sudoku> SudokuSolutionBuffer { get; } = new Stack<Sudoku>();
         static void Main()
         {
             bool toBeContinued = true;
@@ -75,7 +77,10 @@ namespace SudokuGenerator
                             break;
                         case "d" or "data":
                             if (SudokuBuffer.Count == 0) break;
-                            Console.WriteLine(SudokuBuffer.ToString());
+                            for (int i = 0; i < SudokuBuffer.Count; i++)
+                            {
+                                Console.WriteLine($"Sudoku {i + 1}:\n{SudokuBuffer[i].ToString()}");
+                            }
                             break;
                         case "h" or "help":
                             //TODO: Implement
@@ -92,52 +97,45 @@ namespace SudokuGenerator
                 }
             }
         }
+        private static void GenerateSolutions(int count)
+        {
+            List<Task> tasks = new List<Task>();
+            for (int i = 0; i < count; i++)
+            {
+                tasks.Add(Task.Run(() =>
+                {
+                    Sudoku solution = GenerateSolution();
+                    lock (SudokuSolutionBuffer)
+                    {
+                        SudokuSolutionBuffer.Push(solution);
+                    }
+                }));
+            }
+            Task.WaitAll(tasks.ToArray());
+        }
+
+        private static Sudoku GenerateSolution()
+        {
+            return Sudoku.GenerateRandomSolved();
+        }
 
         private static List<Sudoku> Generate(List<string> rawArgs)
         {
             GenerateArgs args = new GenerateArgs(rawArgs);
             List<Sudoku> returnValue = new List<Sudoku>(args.GenerateCount);
-            Random random = new Random(args.Seed);
-            List<Task> tasks = new List<Task>();
-
+            int difficulty = args.Difficulty;
+            GenerateSolutions(args.GenerateCount);
             for (int i = 0; i < args.GenerateCount; i++)
             {
-                tasks.Add(Task.Run(() =>
+                Sudoku solution;
+                if (SudokuSolutionBuffer.Count == 0)
                 {
-                    while (true) 
-                    { 
-                        int[] d = new int[9];
-                        for (int j = 0; j < d.Length; j++)
-                        {
-                            d[j] = random.Next(1, 9);
-                        }
-                        Sudoku tempSudoku = new Sudoku(
-                            [
-                            d[0], 0, 0, 0, 0, 0, 0, 0, 0,
-                            0, 0, 0, 0, d[1], 0, 0, 0, 0,
-                            0, 0, 0, 0, 0, 0, 0, 0, d[2],
-
-                            0, d[3], 0, 0, 0, 0, 0, 0, 0,
-                            0, 0, 0, 0, 0, d[4], 0, 0, 0,
-                            0, 0, 0, 0, 0, 0, d[5], 0, 0,
-
-                            0, 0, d[6], 0, 0, 0, 0, 0, 0,
-                            0, 0, 0, d[7], 0, 0, 0, 0, 0,
-                            0, 0, 0, 0, 0, 0, 0, d[8], 0,
-                            ]);
-                        if (tempSudoku.Solve(args.Difficulty, true) != null)
-                        {
-                            tempSudoku.UnSolve(args.Difficulty);
-                            lock (returnValue)
-                            {
-                                returnValue.Add(tempSudoku);
-                                break;
-                            }
-                        }
-                    }
-                }));
+                    SudokuSolutionBuffer.Push(Sudoku.GenerateRandomSolved());
+                }
+                solution = SudokuSolutionBuffer.Pop();
+                solution.UnSolve(difficulty);
+                returnValue.Add(solution);
             }
-            Task.WaitAll(tasks.ToArray());
             return returnValue;
         }
 
@@ -161,7 +159,7 @@ namespace SudokuGenerator
         private static Sudoku SolveAndPrintResults(List<string> args, Sudoku sudoku)
         {
             if (args.Count == 0) args.Add(int.MaxValue.ToString());
-            SudokuData? result = sudoku.Solve(int.Parse(args[0]));
+            Sudoku? result = sudoku.Solve(int.Parse(args[0]));
             Console.WriteLine(result?.ToFormattedString());
             return sudoku;
         }
