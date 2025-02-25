@@ -19,7 +19,7 @@ namespace SudokuGenerator
             rawArgs = rawArgs.Select(arg => arg.Trim().Trim('"').Trim('\'')).ToList();
             if (rawArgs.Count >= 1)
             {
-                if (!int.TryParse(rawArgs[0], out int difficulty)) throw new ArgumentException("Invalid RowCount argument", nameof(GenerateCount));
+                if (!int.TryParse(rawArgs[0], out int difficulty)) throw new ArgumentException("Invalid Difficulty argument", nameof(Difficulty));
                 Difficulty = difficulty;
             }
             if (rawArgs.Count >= 2) 

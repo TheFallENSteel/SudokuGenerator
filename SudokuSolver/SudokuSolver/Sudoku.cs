@@ -40,6 +40,8 @@ namespace SudokuSolver
                 if (solution.IsSolved())                                                    break;
                 else if (difficulty >= 1 && solution.SudokuData.CheckForHiddenValues())     continue;
                 else if (difficulty >= 2 && solution.SudokuData.CheckForNakedValues())      continue;
+                else if (difficulty >= 3 && solution.SudokuData.CheckForPointing())         continue;
+                else if (difficulty >= 4 && solution.SudokuData.CheckForClaiming())         continue;
                 else                                                                        break;
             }
             return solution;
@@ -93,7 +95,7 @@ namespace SudokuSolver
 
         private static Sudoku? GenerateRandomSudoku(Random random, Sudoku sudoku)
         {
-            sudoku = sudoku.Solve(int.MaxValue);
+            sudoku = sudoku.Solve(2);
             if (sudoku.IsSolved()) return sudoku;
 
             Cell? decisiveCell = sudoku.SudokuData.LeastVariableUnsetCell();
