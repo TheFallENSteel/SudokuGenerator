@@ -82,17 +82,14 @@ namespace SudokuSolver
         {
             foreach (var square in SquareContainers)
             {
-                foreach (var pos in square.Possibilities)
+                foreach (var rowColumn in ColumnContainers.Concat(RowContainers))
                 {
-                    List<Cell> cells = new List<Cell>(3);
-                    Container rowColumn = null;
-                    foreach (var cell in square.Cells)
+                    List<int> intersectionPossibilities = Cell.CellsPossibilities(square.Intersection(rowColumn));
+                    List<int> exclusionPossibilities = Cell.CellsPossibilities(square.Exclusion(rowColumn));
+                    List<int> pointingPossibilities = intersectionPossibilities.Except(exclusionPossibilities).ToList();
+                    foreach (var possibility in pointingPossibilities)
                     {
-                        if (cells.Count != 0 /* && Is not in same row or column*/) break; //TODO: Implement
-                        else 
-                        {
-                            lastCell = cell;
-                        }
+                        //TODO: Implement pointing
                     }
                 }
             }

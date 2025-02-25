@@ -16,6 +16,16 @@ namespace SudokuSolver
         public bool IsDefinitive => Possibilities.Count == 0;
         private int cellValue;
 
+        public static List<int> CellsPossibilities(List<Cell> cells)
+        {
+            List<int> intersectionPossibilities = new List<int>();
+            for (int i = 0; i < cells.Count; i++)
+            {
+                intersectionPossibilities.AddRange(cells[i].Possibilities);
+            }
+            return intersectionPossibilities.Distinct().ToList();
+        }
+
         public Cell(int x, int y)
         {
             this.x = x;

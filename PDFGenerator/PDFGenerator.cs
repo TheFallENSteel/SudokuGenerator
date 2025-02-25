@@ -1,5 +1,4 @@
-﻿
-using PdfSharp;
+﻿using PdfSharp;
 using PdfSharp.Charting;
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
