@@ -78,25 +78,38 @@ namespace SudokuSolver
             return false;
         }
 
-        public bool CheckForPointing() 
+        public bool CheckForPointing(Container[] mainContainers, Container[] secondaryContainers) 
         {
-            foreach (var square in SquareContainers)
+            bool returnValue = false;
+            foreach (var primaryContainer in mainContainers)
             {
-                foreach (var pos in square.Possibilities)
+                foreach (var secondaryContainer in secondaryContainers)
                 {
-                    List<Cell> cells = new List<Cell>(3);
-                    Container rowColumn = null;
-                    foreach (var cell in square.Cells)
+                    List<int> intersectionPossibilities = Cell.CellsPossibilities(primaryContainer.Intersection(secondaryContainer));
+                    List<int> exclusionPossibilities = Cell.CellsPossibilities(primaryContainer.Exclusion(secondaryContainer));
+                    List<int> pointingPossibilities = intersectionPossibilities.Except(exclusionPossibilities).ToList();
+                    foreach (var possibility in pointingPossibilities)
                     {
-                        if (cells.Count != 0 /* && Is not in same row or column*/) break; //TODO: Implement
-                        else 
-                        {
-                            lastCell = cell;
+                        List<Cell> otherCells = secondaryContainer.Exclusion(primaryContainer).Where(cell => cell.IsPossible(possibility)).ToList();
+                        if (otherCells.Count > 0) 
+                        { 
+                            otherCells.ForEach(cell => cell.RemovePossibility(possibility));
+                            returnValue = true;
                         }
                     }
                 }
             }
-            return false;
+            return returnValue;
+        }
+
+        public bool CheckForPointing()
+        {
+            return CheckForPointing(SquareContainers, ColumnContainers.Concat(RowContainers).ToArray());
+        }
+
+        public bool CheckForClaiming()
+        {
+            return CheckForPointing(ColumnContainers.Concat(RowContainers).ToArray(), SquareContainers);
         }
 
         private static int ValidateValue(int data)

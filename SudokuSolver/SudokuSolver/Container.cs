@@ -25,6 +25,10 @@ namespace SudokuSolver
         public int Sum() => Cells.Sum(cell => cell.Value);
         public bool IsSolved() => Sum() == 45;
 
+        public List<Cell> Intersection(Container second) => this.Cells.Intersect(second.Cells).ToList();
+        
+        public List<Cell> Exclusion(Container second) => this.Cells.Except(second.Cells).ToList();
+
         public bool CheckForHiddenValues() 
         {
             for (int i = 0; i < Possibilities.Count; i++)
