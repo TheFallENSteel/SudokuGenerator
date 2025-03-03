@@ -106,46 +106,15 @@ namespace SudokuSolver
 
             int[] sudokuData = sudoku.GetData();
 
-            //Task<Sudoku?>[] tasks = new Task<Sudoku?>[decisiveCellValues.Length];
-            //CancellationTokenSource tokenSource = new CancellationTokenSource();
-            //CancellationToken token = new CancellationToken();
             for (int i = 0; i < decisiveCellValues.Length; i++)
             {
                 sudokuData[decisiveCell.Index] = decisiveCellValues[i];
                 Sudoku? tempSudoku = new Sudoku(sudokuData);
-                tempSudoku = Sudoku.GenerateRandomSudoku(new Random(), tempSudoku);
+                tempSudoku = GenerateRandomSudoku(random, tempSudoku);
                 if (tempSudoku != null && tempSudoku.IsSolved())
                 {
                     return tempSudoku;
                 }
-                /*int j = i;
-                tasks[i] = Task.Run(() => {
-                    Sudoku? result = SolutionGuess(decisiveCell, decisiveCellValues, sudokuData, j);
-                    if (result != null) return result;
-                    throw new TaskCanceledException();
-                }, token);*/
-            }
-            /*while (tasks.Any(task => !task.IsCompleted))
-            { 
-                int index = Task.WaitAny(tasks, new TimeSpan(0, 10, 0));
-                if (index == -1) return null;
-                if (tasks[index].Status == TaskStatus.RanToCompletion)
-                {
-                    tokenSource.Cancel();
-                    return tasks[index].Result;
-                }
-            }*/
-            return null;
-        }
-
-        private static Sudoku? SolutionGuess(Cell? decisiveCell, int[] decisiveCellValues, int[] sudokuData, int i)
-        {
-            sudokuData[decisiveCell.Index] = decisiveCellValues[i];
-            Sudoku? tempSudoku = new Sudoku(sudokuData);
-            tempSudoku = Sudoku.GenerateRandomSudoku(new Random(), tempSudoku);
-            if (tempSudoku != null && tempSudoku.IsSolved())
-            {
-                return tempSudoku;
             }
             return null;
         }
