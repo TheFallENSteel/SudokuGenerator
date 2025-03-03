@@ -1,4 +1,5 @@
 ﻿using PdfSharp;
+using SudokuGenerator.Args;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -10,17 +11,24 @@ using System.Threading.Tasks;
 
 namespace SudokuGenerator
 {
-    public class GenerateArgs
+    public class GenerateArgs : CommandArgs
     {
-        public int GenerateCount { get; } = 6;
-        public int Difficulty { get; } = Environment.TickCount;
-        public GenerateArgs(List<string> rawArgs)
+        public int GenerateCount { get; private set; } = 1;
+        public int Difficulty { get; private set; } = Environment.TickCount;
+        public override string ParametersHelp 
         {
+            get => "[Difficulty] [Count]"; 
+        }
+        public override void Parse(List<string> rawArgs)
+        {
+            this.Difficulty = 1;
+            GenerateCount = 1;
+
             rawArgs = rawArgs.Select(arg => arg.Trim().Trim('"').Trim('\'')).ToList();
             if (rawArgs.Count >= 1)
             {
                 if (!int.TryParse(rawArgs[0], out int difficulty)) throw new ArgumentException("Invalid Difficulty argument", nameof(Difficulty));
-                Difficulty = difficulty;
+                this.Difficulty = difficulty;
             }
             if (rawArgs.Count >= 2) 
             { 
