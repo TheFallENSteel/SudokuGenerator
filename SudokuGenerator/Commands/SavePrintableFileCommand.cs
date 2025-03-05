@@ -10,9 +10,10 @@ namespace SudokuGenerator.Commands
 {
     public static class SavePrintableFileCommand
     {
+        private static readonly string[] Aliases = ["pdf", "save", "s", "output", "out"];
         static SavePrintableFileCommand() 
         {
-            Program.ProgramState.Commands.AddCommand(new Command(Execute, ["pdf", "save", "s", "output", "out"]));
+            Program.ProgramState.Commands.AddCommand(new Command(Execute, aliases: Aliases));
         }
         public static string? Execute(List<string> rawArgs, out bool success)
         {

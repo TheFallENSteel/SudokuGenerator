@@ -12,25 +12,23 @@ namespace SudokuGenerator.Args
 {
     public class SavePrintableFileArgs : CommandArgs
     {
-        public int ColumnCount { get; private set; }
-        public PageSize PageSize { get; private set; }
-        public int RowCount { get; private set; }
+        public PageSize PageSize { get; private set; } = PageSize.A4;
+        public int ColumnCount { get; private set; } = 1;
+        public int RowCount { get; private set; } = 1;
 
-        public string FileName;
-        public string FileDirectory;
+        public string FileName { get; private set; } = "OutputFile.pdf";
+        public string FileDirectory { get; private set; } = Directory.GetCurrentDirectory();
 
-        public override string ParametersHelp
-        {
-            get => "[FileName] [FileDirectory] [PageSize] [RowCount] [ColumnCount]";
-        }
+        public static CommandArgsInfo CommandArgsInfo { get; } = new CommandArgsInfo([
+            new ParameterInfo("[FileName]", "string", "The name of the file to save. Default is \"OutputFile.pdf\"."),
+            new ParameterInfo("[FileDirectory]", "string path", "The directory to save the file in. Default is current directory."),
+            new ParameterInfo("[PageSize]", "page printing format", "The size format of the document that you want to use ex. A4, Letter... Default is A4."),
+            new ParameterInfo("[RowCount]", "positive integer", "The number of rows of sudokus on the final page. Default is 1."),
+            new ParameterInfo("[ColumnCount]", "positive integer", "The number of columns of sudokus on the final page. Default is 1.")
+        ]);
 
         public override void Parse(List<string> rawArgs)
         {
-            ColumnCount = 1;
-            RowCount = 1;
-            FileName = "OutputFile.pdf";
-            FileDirectory = Directory.GetCurrentDirectory();
-            PageSize = PageSize.A4;
 
             rawArgs = rawArgs.Select(arg => arg.Trim().Trim('"').Trim('\'')).ToList();
             if (rawArgs.Count >= 1)

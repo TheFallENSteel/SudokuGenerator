@@ -12,12 +12,12 @@ namespace SudokuGenerator.Commands
     {
         static AddSudokuCommand() 
         {
-            Program.ProgramState.Commands.AddCommand(new Command(Execute, ["add", "+", "append"]));
+            Program.ProgramState.Commands.AddCommand(new Command(Execute, "", AddSudokuArgs.ParametersHelp, ["add", "+", "append"]));
         }
         public static string? Execute(List<string> rawArgs, out bool success) 
         {
-            success = false;
             AddSudokuArgs args = new AddSudokuArgs();
+            success = false;
             args.Parse(rawArgs);
             if (args.SudokuString == null) return null;
             try

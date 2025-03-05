@@ -12,17 +12,19 @@ namespace SudokuGenerator.Args
 {
     public class PrintSudokuStringArgs : CommandArgs
     {
-        public bool Raw { get; private set; }
+        public bool Raw { get; private set; } = false;
 
-        public override string ParametersHelp
-        {
-            get => "[Raw]";
-        }
+        public static CommandArgsInfo CommandArgsInfoget{get; } = new CommandArgsInfo([
+                new ParameterInfo(
+                    "Raw",
+                    "bool",
+                    "Determines if sudoku string should be printed in raw format, " +
+                    "\nthat is without spaces and new lines." +
+                    "Default value is false.")
+            ]);
 
         public override void Parse(List<string> rawArgs)
         {
-            this.Raw = false;
-
             rawArgs = rawArgs.Select(arg => arg.Trim().Trim('"').Trim('\'').ToLower()).ToList();
             if (rawArgs.Count >= 1)
             {

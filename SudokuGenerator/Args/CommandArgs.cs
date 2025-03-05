@@ -9,6 +9,5 @@ namespace SudokuGenerator.Args
     public abstract class CommandArgs
     {
         public abstract void Parse(List<string> args);
-        public abstract string ParametersHelp { get; }
     }
 }

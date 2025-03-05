@@ -10,9 +10,10 @@ namespace SudokuGenerator.Commands
 {
     public static class GenerateSudokuCommand
     {
+        private static readonly string[] Aliases = ["generate", "gen", "g"];
         static GenerateSudokuCommand()
         {
-            Program.ProgramState.Commands.AddCommand(new Command(Execute, ["generate", "gen", "g"]));
+            Program.ProgramState.Commands.AddCommand(new Command(Execute, aliases: Aliases));
         }
         public static string? Execute(List<string> rawArgs, out bool success)
         {

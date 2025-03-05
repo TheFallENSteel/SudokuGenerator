@@ -11,9 +11,10 @@ namespace SudokuGenerator.Commands
 {
     public static class PrintSudokuStringCommand
     {
+        private static readonly string[] Aliases = ["print", "pr", "data", "d"];
         static PrintSudokuStringCommand()
         {
-            Program.ProgramState.Commands.AddCommand(new Command(Execute, ["print", "pr", "data", "d"]));
+            Program.ProgramState.Commands.AddCommand(new Command(Execute, aliases: Aliases));
         }
         public static string? Execute(List<string> rawArgs, out bool success)
         {

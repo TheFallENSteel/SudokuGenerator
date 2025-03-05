@@ -32,6 +32,7 @@ namespace SudokuSolver
         }
 
         static int totalMin = int.MaxValue;
+        public const int MAX_DIFFICULTY = 4;
         public Sudoku Solve(int difficulty)
         {
             Sudoku solution = new Sudoku(this.GetData());

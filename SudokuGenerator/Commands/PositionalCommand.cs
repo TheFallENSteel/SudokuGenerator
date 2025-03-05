@@ -7,23 +7,17 @@ using System.Threading.Tasks;
 
 namespace SudokuGenerator.Commands
 {
-    public class PositionalCommand
+    public class PositionalCommand : Command
     {
         public delegate string? ExecutePositionalCommandCommand(List<string> args, out bool success);
-        public ExecutePositionalCommandCommand ExecuteMethod { get; }
-        public readonly string[] Aliases;
-        public PositionalCommand(ExecutePositionalCommandCommand command, string[] aliases)
+        private ExecutePositionalCommandCommand ExecutePositionalMethod { get; }
+        public PositionalCommand(ExecutePositionalCommandCommand positionalCommand, ParameterInfo parameterInfo, ExecuteCommand command, string[] aliases) : base(command, aliases: parameterInfo, helpString: aliases)
         {
-            Aliases = aliases.Select(a => a.ToLower()).ToArray();
-            ExecuteMethod = command;
+            ExecutePositionalMethod = positionalCommand;
         }
-        public bool IsAlias(string alias)
+        public virtual string? ExecutePositional(List<string> args, out bool success)
         {
-            return Aliases.Contains(alias);
-        }
-        public virtual string? Execute(List<string> args, out bool success)
-        {
-            return ExecuteMethod.Invoke(args, out success);
+            return ExecutePositionalMethod.Invoke(args, out success);
         }
     }
 }

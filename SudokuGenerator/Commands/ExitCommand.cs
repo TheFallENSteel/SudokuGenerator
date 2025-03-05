@@ -10,9 +10,10 @@ namespace SudokuGenerator.Commands
 {
     public static class ExitCommand
     {
+        private static readonly string[] Aliases = ["exit", "ex", "e", "stop", "terminate", "end", "quit", "leave", "q"];
         static ExitCommand()
         {
-            Program.ProgramState.Commands.AddCommand(new Command(Execute, ["exit", "ex", "e", "stop", "terminate", "end", "quit", "leave", "q"]));
+            Program.ProgramState.Commands.AddCommand(new Command(Execute, aliases: Aliases));
         }
         public static string? Execute(List<string> rawArgs, out bool success)
         {
