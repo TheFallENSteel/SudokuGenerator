@@ -6,21 +6,20 @@ using System.Threading.Tasks;
 
 namespace SudokuGenerator.Args
 {
-    public class AddSudokuArgs : CommandArgs
+    public class HelpCommandArgs : CommandArgs
     {
-        public string? SudokuString { get; private set; }
+        public string? CommandString { get; private set; }
         public static CommandArgsInfo CommandArgsInfo { get; } = new CommandArgsInfo(
         [
             new ParameterInfo(
-                "SudokuString", "string", "The sudoku string representing the sudoku. " +
-                "\nIt is in format 000 102 378 000..." +
-                "\n[Ignores white spaces]") 
+                "Command", "string", "Command you need to help with " +
+                "\nDefault is quickGuide") 
         ]
     );
         public override void Parse(List<string> rawArgs)
         {
             rawArgs = CommandArgs.ProcessArgs(rawArgs);
-            this.SudokuString = CommandArgs.ParseArg(rawArgs, 0, "");
+            this.CommandString = CommandArgs.ParseArg(rawArgs, 0, "quickStart");
         }
     }
 }

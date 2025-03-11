@@ -9,7 +9,7 @@ namespace SudokuGenerator.Args
 {
     public class SolveSudokuArgs : CommandArgs
     {
-        public int Difficulty { get; private set; } = int.MaxValue;
+        public int Difficulty { get; private set; }
         public static CommandArgsInfo CommandArgsInfo { get; } = new CommandArgsInfo([
             new ParameterInfo(
                 "MaxDifficulty", 
@@ -23,11 +23,8 @@ namespace SudokuGenerator.Args
         public override void Parse(List<string> rawArgs)
         {
             rawArgs = rawArgs.Select(arg => arg.Trim().Trim('"').Trim('\'')).ToList();
-            if (rawArgs.Count >= 1)
-            {
-                if (!int.TryParse(rawArgs[0], out int difficulty)) throw new ArgumentException("Invalid Difficulty argument", nameof(Difficulty));
-                this.Difficulty = difficulty;
-            }
+            rawArgs = CommandArgs.ProcessArgs(rawArgs);
+            this.Difficulty = CommandArgs.ParseArg(rawArgs, 0, int.MaxValue);
         }
     }
 }

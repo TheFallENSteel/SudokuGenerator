@@ -12,7 +12,7 @@ namespace SudokuGenerator.Args
 {
     public class PrintSudokuStringArgs : CommandArgs
     {
-        public bool Raw { get; private set; } = false;
+        public bool Raw { get; private set; }
 
         public static CommandArgsInfo CommandArgsInfoget{get; } = new CommandArgsInfo([
                 new ParameterInfo(
@@ -25,19 +25,8 @@ namespace SudokuGenerator.Args
 
         public override void Parse(List<string> rawArgs)
         {
-            rawArgs = rawArgs.Select(arg => arg.Trim().Trim('"').Trim('\'').ToLower()).ToList();
-            if (rawArgs.Count >= 1)
-            {
-                switch (rawArgs[0]) 
-                { 
-                    case "r": case "raw": case "true": case "t": case "1":
-                        this.Raw = true;
-                    break;
-                    default:
-                        this.Raw = false;
-                        break;
-                }
-            }
+            rawArgs = CommandArgs.ProcessArgs(rawArgs);
+            this.Raw = CommandArgs.ParseArg(rawArgs, 0, false);
         }
     }
 }

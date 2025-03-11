@@ -13,7 +13,7 @@ namespace SudokuGenerator.Commands
         private static readonly string[] Aliases = ["clear", "clr", "cl", "delete", "del", "flush"];
         static ClearCommand()
         {
-            Program.ProgramState.Commands.AddCommand(new Command(Execute, aliases: Aliases));
+            Program.ProgramState.Commands.AddCommand(new Command(Execute, EmptyArgs.CommandArgsInfo, Aliases, ""));
         }
         public static string? Execute(List<string> rawArgs, out bool success)
         {

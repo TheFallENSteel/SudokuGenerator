@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SudokuGenerator.Args;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,8 +12,7 @@ namespace SudokuGenerator.Commands
         private static readonly string[] Aliases = ["help", "help"];
         static HelpPositionalCommand()
         {
-            Program.ProgramState.Commands.AddCommand(new Command(Execute, aliases: Aliases));
-            Program.ProgramState.Commands.AddCommand(new PositionalCommand(ExecutePositional, Aliases));
+            Program.ProgramState.Commands.AddCommand(new PositionalCommand(ExecutePositional, HelpCommandArgs.CommandArgsInfo, Execute, Aliases));
         }
         public static string? Execute(List<string> rawArgs, out bool success)
         {

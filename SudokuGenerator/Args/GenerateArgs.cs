@@ -14,8 +14,8 @@ namespace SudokuGenerator
 {
     public class GenerateArgs : CommandArgs
     {
-        public int GenerateCount { get; private set; } = 1;
-        public int Difficulty { get; private set; } = int.MaxValue;
+        public int GenerateCount { get; private set; }
+        public int Difficulty { get; private set; }
         public static CommandArgsInfo CommandArgsInfo { get; } = new CommandArgsInfo([
                 new ParameterInfo(
                     "Difficulty",
@@ -30,21 +30,11 @@ namespace SudokuGenerator
                     "Determines how many sudokus should be generated. " +
                     "\nDefault value is 1.")
             ]);
-            //get => ["[Difficulty]", "[Count]"];
         public override void Parse(List<string> rawArgs)
         {
-
-            rawArgs = rawArgs.Select(arg => arg.Trim().Trim('"').Trim('\'')).ToList();
-            if (rawArgs.Count >= 1)
-            {
-                if (!int.TryParse(rawArgs[0], out int difficulty)) throw new ArgumentException("Invalid Difficulty argument", nameof(Difficulty));
-                this.Difficulty = difficulty;
-            }
-            if (rawArgs.Count >= 2) 
-            { 
-                if (!int.TryParse(rawArgs[1], out int generateCount)) throw new ArgumentException("Invalid GenerateCount argument", nameof(GenerateCount));
-                GenerateCount = generateCount;
-            }
+            rawArgs = CommandArgs.ProcessArgs(rawArgs);
+            this.Difficulty = CommandArgs.ParseArg(rawArgs, 0, int.MaxValue);
+            this.GenerateCount = CommandArgs.ParseArg(rawArgs, 1, 1);
         }
     }
 }

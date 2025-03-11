@@ -12,7 +12,7 @@ namespace SudokuGenerator.Commands
     {
         static AddSudokuCommand() 
         {
-            Program.ProgramState.Commands.AddCommand(new Command(Execute, "", AddSudokuArgs.ParametersHelp, ["add", "+", "append"]));
+            Program.ProgramState.Commands.AddCommand(new Command(Execute, AddSudokuArgs.CommandArgsInfo, ["add", "+", "append"], ""));
         }
         public static string? Execute(List<string> rawArgs, out bool success) 
         {

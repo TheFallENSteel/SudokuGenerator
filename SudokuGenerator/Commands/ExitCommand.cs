@@ -13,7 +13,7 @@ namespace SudokuGenerator.Commands
         private static readonly string[] Aliases = ["exit", "ex", "e", "stop", "terminate", "end", "quit", "leave", "q"];
         static ExitCommand()
         {
-            Program.ProgramState.Commands.AddCommand(new Command(Execute, aliases: Aliases));
+            Program.ProgramState.Commands.AddCommand(new Command(Execute, EmptyArgs.CommandArgsInfo, Aliases, "Quit the generator."));
         }
         public static string? Execute(List<string> rawArgs, out bool success)
         {

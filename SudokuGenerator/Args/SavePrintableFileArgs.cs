@@ -12,12 +12,11 @@ namespace SudokuGenerator.Args
 {
     public class SavePrintableFileArgs : CommandArgs
     {
-        public PageSize PageSize { get; private set; } = PageSize.A4;
-        public int ColumnCount { get; private set; } = 1;
-        public int RowCount { get; private set; } = 1;
-
-        public string FileName { get; private set; } = "OutputFile.pdf";
-        public string FileDirectory { get; private set; } = Directory.GetCurrentDirectory();
+        public PageSize PageSize { get; private set; }
+        public int ColumnCount { get; private set; }
+        public int RowCount { get; private set; }
+        public string FileName { get; private set; }
+        public string FileDirectory { get; private set; }
 
         public static CommandArgsInfo CommandArgsInfo { get; } = new CommandArgsInfo([
             new ParameterInfo("[FileName]", "string", "The name of the file to save. Default is \"OutputFile.pdf\"."),
@@ -29,31 +28,12 @@ namespace SudokuGenerator.Args
 
         public override void Parse(List<string> rawArgs)
         {
-
-            rawArgs = rawArgs.Select(arg => arg.Trim().Trim('"').Trim('\'')).ToList();
-            if (rawArgs.Count >= 1)
-            {
-                FileName = rawArgs[0];
-            }
-            if (rawArgs.Count >= 2)
-            {
-                FileDirectory = rawArgs[1];
-            }
-            if (rawArgs.Count >= 3)
-            {
-                if (!Enum.TryParse(typeof(PageSize), rawArgs[2], true, out object? possiblePageSize)) throw new ArgumentException("Invalid PageSize argument", nameof(PageSize));
-                PageSize = (PageSize)possiblePageSize;
-            }
-            if (rawArgs.Count >= 4)
-            {
-                if (!int.TryParse(rawArgs[3], out int possibleRowCount)) throw new ArgumentException("Invalid RowCount argument", nameof(RowCount));
-                RowCount = possibleRowCount > 1 ? possibleRowCount : 1;
-            }
-            if (rawArgs.Count >= 5)
-            {
-                if (!int.TryParse(rawArgs[4], out int possibleColumnCount)) throw new ArgumentException("Invalid Column argument", nameof(ColumnCount));
-                ColumnCount = possibleColumnCount > 1 ? possibleColumnCount : 1;
-            }
+            rawArgs = CommandArgs.ProcessArgs(rawArgs);
+            this.FileName = CommandArgs.ParseArg(rawArgs, 0, "OutputFile.pdf");
+            this.FileDirectory = CommandArgs.ParseArg(rawArgs, 1, Directory.GetCurrentDirectory());
+            this.PageSize = CommandArgs.ParseArg<PageSize>(rawArgs, 2, PageSize.A4);
+            this.RowCount = CommandArgs.ParseArg(rawArgs, 3, 1);
+            this.ColumnCount = CommandArgs.ParseArg(rawArgs, 4, 1);
         }
     }
 }
