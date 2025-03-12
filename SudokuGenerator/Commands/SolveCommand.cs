@@ -2,18 +2,22 @@
 using SudokuSolver;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
 
 namespace SudokuGenerator.Commands
 {
     public static class SolveCommand
     {
-        private static readonly string[] Aliases = ["solve"];
-        static SolveCommand()
+        public static readonly string[] Aliases = ["solve"];
+        private const string Name = "solve";
+        private const string ShortDescription = "Solves the sudoku.";
+        private const string LongDescription = "Used to solve all sudokus in the sudoku buffer.";
+        public static CommandInfo CommandInfo => new CommandInfo(Name, ShortDescription, LongDescription, SolveSudokuArgs.CommandArgsInfo);
+
+        [ModuleInitializer]
+        public static void Init()
         {
-            Program.ProgramState.Commands.AddCommand(new Command(Execute, aliases: Aliases));
+            Program.ProgramState.CommandContainer.AddCommand(new Command(Execute, CommandInfo, Aliases));
         }
         public static string? Execute(List<string> rawArgs, out bool success)
         {

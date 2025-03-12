@@ -1,28 +1,28 @@
 ﻿using SudokuGenerator.Args;
-using SudokuSolver;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SudokuGenerator.Commands
 {
     public static class PrintSudokuStringCommand
     {
-        private static readonly string[] Aliases = ["print", "pr", "data", "d"];
-        static PrintSudokuStringCommand()
+        public static readonly string[] Aliases = ["print", "pr", "data", "d"];
+        private const string Name = "print";
+        private const string ShortDescription = "Prints sudoku.";
+        private const string LongDescription = "Displays the sudoku in the console.";
+        public static CommandInfo CommandInfo => new CommandInfo(Name, ShortDescription, LongDescription, PrintSudokuStringArgs.CommandArgsInfo);
+        [ModuleInitializer]
+        public static void Init()
         {
-            Program.ProgramState.Commands.AddCommand(new Command(Execute, aliases: Aliases));
+            Program.ProgramState.CommandContainer.AddCommand(new Command(Execute, CommandInfo, Aliases));
         }
         public static string? Execute(List<string> rawArgs, out bool success)
         {
             PrintSudokuStringArgs args = new PrintSudokuStringArgs();
             args.Parse(rawArgs);
             string returnValue = "";
-            if (Program.ProgramState.SudokuBuffer.Count == 0) 
-            { 
+            if (Program.ProgramState.SudokuBuffer.Count == 0)
+            {
                 success = false;
                 return "Sudoku buffer is empty!";
             }

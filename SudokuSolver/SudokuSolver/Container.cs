@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SudokuSolver
 {
@@ -26,10 +23,10 @@ namespace SudokuSolver
         public bool IsSolved() => Sum() == 45;
 
         public List<Cell> Intersection(Container second) => this.Cells.Intersect(second.Cells).ToList();
-        
+
         public List<Cell> Exclusion(Container second) => this.Cells.Except(second.Cells).ToList();
 
-        public bool CheckForHiddenValues() 
+        public bool CheckForHiddenValues()
         {
             for (int i = 0; i < Possibilities.Count; i++)
             {
@@ -38,32 +35,32 @@ namespace SudokuSolver
                 int counter = 0;
                 for (int j = 0; j < Cells.Count; j++)
                 {
-                    if (Cells[j].IsPossible(possibility)) 
-                    { 
+                    if (Cells[j].IsPossible(possibility))
+                    {
                         lastCell = Cells[j];
                         counter++;
                     }
                 }
-                if (counter == 1 && lastCell.TrySetValue(possibility)) 
+                if (counter == 1 && lastCell.TrySetValue(possibility))
                 {
                     return true;
                 }
             }
             return false;
         }
-        public void NumberSet(int value) 
+        public void NumberSet(int value)
         {
             Possibilities.Remove(value);
-            Cells.ForEach(tempCell => 
+            Cells.ForEach(tempCell =>
             {
-                if (tempCell.Value == 0) 
-                { 
+                if (tempCell.Value == 0)
+                {
                     tempCell.RemovePossibility(value);
                 }
             });
         }
 
-        public void AddCell(Cell cell) 
+        public void AddCell(Cell cell)
         {
             if (!Cells.Contains(cell))
             {

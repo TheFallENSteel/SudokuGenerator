@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Common;
-using System.Drawing;
 using System.Linq;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SudokuSolver
 {
@@ -21,7 +18,7 @@ namespace SudokuSolver
         public SudokuData(int[] data, bool toBeValidated = false)
         {
             GenerateGrid();
-            if (!toBeValidated && !SetData(data)) 
+            if (!toBeValidated && !SetData(data))
             {
                 throw new Exception("Invalid Sudoku data");
             }
@@ -36,16 +33,16 @@ namespace SudokuSolver
             for (int i = 0; i < data.Length; i++)
             {
                 ValidateValue(data[i]);
-                if (!Cells[i].TrySetValue(data[i])) 
-                { 
+                if (!Cells[i].TrySetValue(data[i]))
+                {
                     return false;
                 }
             }
             return true;
         }
 
-        public int[] GetRawData() 
-        { 
+        public int[] GetRawData()
+        {
             return Cells.Select(cell => cell.Value).ToArray();
         }
 
@@ -53,15 +50,15 @@ namespace SudokuSolver
         {
             for (int i = 0; i < Cells.Length; i++)
             {
-                if(Cells[i].ConfirmDefinitiveValue()) 
-                { 
+                if (Cells[i].ConfirmDefinitiveValue())
+                {
                     return true;
                 }
             }
             return false;
         }
 
-        public bool CheckForHiddenValues() 
+        public bool CheckForHiddenValues()
         {
             foreach (var row in RowContainers)
             {
@@ -78,7 +75,7 @@ namespace SudokuSolver
             return false;
         }
 
-        public bool CheckForPointing(Container[] mainContainers, Container[] secondaryContainers) 
+        public bool CheckForPointing(Container[] mainContainers, Container[] secondaryContainers)
         {
             bool returnValue = false;
             foreach (var primaryContainer in mainContainers)
@@ -91,8 +88,8 @@ namespace SudokuSolver
                     foreach (var possibility in pointingPossibilities)
                     {
                         List<Cell> otherCells = secondaryContainer.Exclusion(primaryContainer).Where(cell => cell.IsPossible(possibility)).ToList();
-                        if (otherCells.Count > 0) 
-                        { 
+                        if (otherCells.Count > 0)
+                        {
                             otherCells.ForEach(cell => cell.RemovePossibility(possibility));
                             returnValue = true;
                         }
@@ -130,7 +127,7 @@ namespace SudokuSolver
             }
             for (int i = 0; i < 9; i++)
             {
-                RowContainers   [i] = new Container(GetRowCells(i), i, "Row");
+                RowContainers[i] = new Container(GetRowCells(i), i, "Row");
                 ColumnContainers[i] = new Container(GetColumnCells(i), i, "Column");
                 SquareContainers[i] = new Container(GetSquareCells(i % SquareSize, i / SquareSize), i, "Square");
             }
@@ -139,10 +136,10 @@ namespace SudokuSolver
         public Container GetColumn(int column) => RowContainers[column];
         public Container GetSquare(int squareX, int squareY) => RowContainers[squareX + squareY * SquareSize];
         public Cell GetCell(int cellX, int cellY) => Cells[cellX + cellY * Size];
-        public bool IsSolved() 
+        public bool IsSolved()
         {
-            return RowContainers.All(row => row.IsSolved()) 
-                && ColumnContainers.All(col => col.IsSolved()) 
+            return RowContainers.All(row => row.IsSolved())
+                && ColumnContainers.All(col => col.IsSolved())
                 && SquareContainers.All(sqr => sqr.IsSolved());
         }
         public int GetEmptyCellsCount()
@@ -154,7 +151,7 @@ namespace SudokuSolver
             }
             return counter;
         }
-        private Cell[] GetRowCells(int row) 
+        private Cell[] GetRowCells(int row)
         {
             return Enumerable.Range(0, Size).Select(c => GetCell(c, row)).ToArray();
         }
@@ -167,7 +164,7 @@ namespace SudokuSolver
             return Enumerable.Range(0, Size).Select(n => GetCell(squareX * SquareSize + n % SquareSize, squareY * SquareSize + n / SquareSize)).ToArray();
         }
 
-        public Cell? LeastVariableUnsetCell() 
+        public Cell? LeastVariableUnsetCell()
         {
             Cell? returnValue = null;
             for (int i = 1; i < Cells.Length; i++)

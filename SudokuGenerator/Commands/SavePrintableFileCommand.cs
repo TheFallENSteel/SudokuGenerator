@@ -5,15 +5,22 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace SudokuGenerator.Commands
 {
     public static class SavePrintableFileCommand
     {
-        private static readonly string[] Aliases = ["pdf", "save", "s", "output", "out"];
-        static SavePrintableFileCommand() 
+        public static readonly string[] Aliases = ["pdf", "export", "save", "s", "output", "out"];
+        private const string Name = "pdf";
+        private const string ShortDescription = "Creates pdf file for printing.";
+        private const string LongDescription = "Saves all the sudokus from the buffer to be exported in pdf format.";
+        public static CommandInfo CommandInfo => new CommandInfo(Name, ShortDescription, LongDescription, SavePrintableFileArgs.CommandArgsInfo);
+
+        [ModuleInitializer]
+        public static void Init()
         {
-            Program.ProgramState.Commands.AddCommand(new Command(Execute, aliases: Aliases));
+            Program.ProgramState.CommandContainer.AddCommand(new Command(Execute, CommandInfo, Aliases));
         }
         public static string? Execute(List<string> rawArgs, out bool success)
         {

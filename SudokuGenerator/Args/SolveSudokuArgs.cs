@@ -1,9 +1,6 @@
 ﻿using SudokuSolver;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SudokuGenerator.Args
 {
@@ -12,8 +9,8 @@ namespace SudokuGenerator.Args
         public int Difficulty { get; private set; }
         public static CommandArgsInfo CommandArgsInfo { get; } = new CommandArgsInfo([
             new ParameterInfo(
-                "MaxDifficulty", 
-                "Integer", 
+                "MaxDifficulty",
+                "Integer",
                 "   Determines maximum difficulty that the solver can use to solve the puzzle. " +
                 $"\n<1: Disallows all solving methods" +
                 $"\n>={Sudoku.MAX_DIFFICULTY}: Allows all solving methods" +

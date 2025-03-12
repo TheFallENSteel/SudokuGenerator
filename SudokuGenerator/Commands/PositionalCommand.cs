@@ -1,19 +1,19 @@
-﻿using SudokuGenerator.Args;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace SudokuGenerator.Commands
 {
-    public class PositionalCommand : Command
+    public class PositionalCommand
     {
+        public const char PositionalCommandPrefix = '?';
         public delegate string? ExecutePositionalCommandCommand(List<string> args, out bool success);
+        public string[] Aliases { get; }
+        public CommandInfo CommandInfo { get; }
         private ExecutePositionalCommandCommand ExecutePositionalMethod { get; }
-        public PositionalCommand(ExecutePositionalCommandCommand positionalCommand, ParameterInfo parameterInfo, ExecuteCommand command, string[] aliases) : base(command, aliases: parameterInfo, helpString: aliases)
+        public PositionalCommand(ExecutePositionalCommandCommand positionalCommand, CommandInfo commandInfo, string[] aliases)
         {
-            ExecutePositionalMethod = positionalCommand;
+            this.ExecutePositionalMethod = positionalCommand;
+            this.CommandInfo = commandInfo;
+            this.Aliases = aliases;
         }
         public virtual string? ExecutePositional(List<string> args, out bool success)
         {

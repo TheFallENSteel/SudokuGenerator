@@ -1,12 +1,6 @@
-﻿using SudokuGenerator.Args;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Dynamic;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SudokuGenerator.Commands
 {
@@ -14,11 +8,25 @@ namespace SudokuGenerator.Commands
     {
         readonly Dictionary<string, Command> commandDictionary = new Dictionary<string, Command>();
         readonly Dictionary<string, PositionalCommand> positionalCommandDictionary = new Dictionary<string, PositionalCommand>();
-        public bool IsPositionalCommandCommand(List<string> fullCommand, out string? returnValue) 
+        public bool IsPositionalCommandCommand(List<string> fullCommand, out string? returnValue)
         {
             returnValue = null;
             return false;
         }
+        public string ListAllCommands()
+        {
+            return "List of all the commands:\n"
+                + string.Concat(
+                    commandDictionary.Values
+                    .Distinct()
+                    .Select(comm => comm.CommandInfo.ShortParameterDescription + "\n"))
+                + "Positional commands:\n"
+                + string.Concat(
+                    positionalCommandDictionary.Values
+                    .Distinct()
+                    .Select(comm => PositionalCommand.PositionalCommandPrefix + comm.CommandInfo.ShortParameterDescription + "\n"));
+        }
+        //string.Concat(commandDictionary.Values.Distinct().Select(comm => comm.CommandInfo.ShortParameterDescription + "\n"))
         public bool Execute(List<string> fullCommand, out string? returnValue)
         {
             bool success = false;
@@ -29,10 +37,10 @@ namespace SudokuGenerator.Commands
                 return success;
             }
             //No need to check the first command, as positional commands cannot be first
+            if (fullCommand.Count > 0) TryExecutePositionalCommand(fullCommand, out returnValue, out success);
+            if (success) return success;
             string commandString = fullCommand[0];
             fullCommand.RemoveAt(0);
-            TryExecutePositionalCommand(fullCommand, out returnValue, out success);
-            if (success) return success;
             TryExecuteCommand(fullCommand, commandString, out returnValue, out success);
             return success;
         }
@@ -42,13 +50,15 @@ namespace SudokuGenerator.Commands
             success = false;
             returnValue = null;
 
-            foreach (var args in fullCommand)
+            for (int i = 0; i < fullCommand.Count; i++)
             {
-                if (args.Length != 0 
-                    && args[0] == '-' 
-                    && positionalCommandDictionary.TryGetValue(args.TrimStart('-'), out PositionalCommand? command))
+                var args = fullCommand[i];
+                if (args.Length != 0
+                    && args[0] == PositionalCommand.PositionalCommandPrefix
+                    && positionalCommandDictionary.TryGetValue(args.TrimStart(PositionalCommand.PositionalCommandPrefix), out PositionalCommand? command))
                 {
-                    returnValue = command.Execute(fullCommand, out success);
+                    returnValue = command.ExecutePositional(fullCommand, out success);
+                    break;
                 }
             }
             return success;
@@ -74,17 +84,34 @@ namespace SudokuGenerator.Commands
             return success;
         }
 
-        public bool GetCommand(string commandString, out Command? command)
+        public bool GetCommand(string? commandString, out Command command)
         {
+            if (commandString == null)
+            {
+                command = null;
+                return false;
+            }
             return commandDictionary.TryGetValue(commandString, out command);
         }
-        public void AddCommand(Command command) 
+        public void AddCommand(Command command)
         {
-            AddCommand<Command>(command, commandDictionary);
+            foreach (var alias in command.Aliases)
+            {
+                if (!commandDictionary.TryAdd(alias, command))
+                {
+                    throw new Exception($"Alias '{alias}' already used in {nameof(commandDictionary)}. Command '{commandDictionary[alias]}'!");
+                }
+            }
         }
-        public void AddPositionalCommand(PositionalCommand positionalCommand)
+        public void AddCommand(PositionalCommand positionalCommand)
         {
-            AddCommand<PositionalCommand>(positionalCommand, positionalCommandDictionary);
+            foreach (var alias in positionalCommand.Aliases)
+            {
+                if (!positionalCommandDictionary.TryAdd(alias, positionalCommand))
+                {
+                    throw new Exception($"Alias '{alias}' already used in {nameof(positionalCommandDictionary)}. Command '{positionalCommandDictionary[alias]}'!");
+                }
+            }
         }
         public void AddCommand<TCommand>(TCommand command, Dictionary<string, TCommand> commandDict) where TCommand : Command
         {

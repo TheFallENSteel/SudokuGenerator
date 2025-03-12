@@ -1,9 +1,6 @@
-﻿using PdfSharp;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SudokuGenerator.Args
 {
@@ -11,9 +8,9 @@ namespace SudokuGenerator.Args
     {
         public abstract void Parse(List<string> args);
         public static List<string> ProcessArgs(List<string> args) => args.Select(arg => arg.Trim().Trim('"').Trim('\'')).ToList();
-        public static string ParseArg(List<string> args, int index, string defaultValue = "") 
+        public static string ParseArg(List<string> args, int index, string defaultValue = "")
             => args.Count > index ? args[index] : defaultValue;
-        public static int ParseArg(List<string> args, int index, int defaultValue = 1) 
+        public static int ParseArg(List<string> args, int index, int defaultValue = 1)
         {
             if (args.Count <= index) return defaultValue;
             if (!int.TryParse(args[index], out int returnValue)) throw new ArgumentException($"Invalid Difficulty argument at index: {index}.");
@@ -30,7 +27,9 @@ namespace SudokuGenerator.Args
             if (args.Count <= index) return defaultValue;
             switch (args[index])
             {
-                case "true": case "t": case "1":
+                case "true":
+                case "t":
+                case "1":
                     return true;
                 default:
                     return false;

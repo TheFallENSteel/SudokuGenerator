@@ -1,14 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Diagnostics.Metrics;
-using System.Drawing;
-using System.Linq;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace SudokuSolver
 {
@@ -21,13 +11,13 @@ namespace SudokuSolver
             SudokuData = new SudokuData(data, toBeValidated);
         }
 
-        public void SetSudoku(Sudoku sudoku) 
-        { 
+        public void SetSudoku(Sudoku sudoku)
+        {
             this.SudokuData = sudoku.SudokuData;
         }
 
-        public int[] GetData() 
-        { 
+        public int[] GetData()
+        {
             return SudokuData.GetRawData();
         }
 
@@ -38,12 +28,12 @@ namespace SudokuSolver
             Sudoku solution = new Sudoku(this.GetData());
             while (true)
             {
-                if (solution.IsSolved())                                                    break;
-                else if (difficulty >= 1 && solution.SudokuData.CheckForHiddenValues())     continue;
-                else if (difficulty >= 2 && solution.SudokuData.CheckForNakedValues())      continue;
-                else if (difficulty >= 3 && solution.SudokuData.CheckForPointing())         continue;
-                else if (difficulty >= 4 && solution.SudokuData.CheckForClaiming())         continue;
-                else                                                                        break;
+                if (solution.IsSolved()) break;
+                else if (difficulty >= 1 && solution.SudokuData.CheckForHiddenValues()) continue;
+                else if (difficulty >= 2 && solution.SudokuData.CheckForNakedValues()) continue;
+                else if (difficulty >= 3 && solution.SudokuData.CheckForPointing()) continue;
+                else if (difficulty >= 4 && solution.SudokuData.CheckForClaiming()) continue;
+                else break;
             }
             return solution;
         }
@@ -81,7 +71,7 @@ namespace SudokuSolver
             return (null, null);
         }*/
 
-        public static Sudoku GenerateRandomSolved() 
+        public static Sudoku GenerateRandomSolved()
         {
             int[] tempGrid = new int[81];
             for (int i = 0; i < tempGrid.Length; i++)

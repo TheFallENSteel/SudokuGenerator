@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace SudokuGenerator.Args
 {
@@ -14,7 +10,7 @@ namespace SudokuGenerator.Args
             new ParameterInfo(
                 "SudokuString", "string", "The sudoku string representing the sudoku. " +
                 "\nIt is in format 000 102 378 000..." +
-                "\n[Ignores white spaces]") 
+                "\n[Ignores white spaces]")
         ]
     );
         public override void Parse(List<string> rawArgs)

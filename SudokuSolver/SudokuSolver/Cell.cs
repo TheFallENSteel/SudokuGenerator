@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SudokuSolver
 {
@@ -42,18 +39,18 @@ namespace SudokuSolver
             cellValue = 0;
         }
 
-        public int Value 
-        { 
-            get 
+        public int Value
+        {
+            get
             {
                 return cellValue;
             }
-            private set 
-            { 
+            private set
+            {
                 cellValue = value;
             }
         }
-        public bool TrySetValue(int value) 
+        public bool TrySetValue(int value)
         {
             if (value != 0 && cellValue == 0 && Possibilities.Contains(value))
             {
@@ -87,15 +84,15 @@ namespace SudokuSolver
             }
             return false;
         }
-        public bool RemovePossibility(int value) 
-        { 
+        public bool RemovePossibility(int value)
+        {
             return Possibilities.Remove(value);
         }
-        public bool IsPossible(int value) 
+        public bool IsPossible(int value)
         {
             return Possibilities.Contains(value);
         }
-        public void AddContainer(Container container) 
+        public void AddContainer(Container container)
         {
             if (!Containers.Contains(container))
             {

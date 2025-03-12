@@ -1,27 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 
 namespace SudokuGenerator
 {
     public static class SudokuLoader
     {
-        public static int[] LoadFromString(string source, string? divider) 
+        public static int[] LoadFromString(string source, string? divider)
         {
             if (divider == null)
             {
                 return source
                     .ToCharArray()
                     .Where(c => c != ' ')
-                    .Select(val => 
+                    .Select(val =>
                         {
                             return int.Parse(val.ToString());
                         })
                     .ToArray();
             }
-            else 
+            else
             {
                 return source
                     .Split(divider)
