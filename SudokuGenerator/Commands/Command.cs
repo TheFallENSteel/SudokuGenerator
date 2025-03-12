@@ -1,9 +1,6 @@
-﻿using SudokuGenerator.Args;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SudokuGenerator.Commands
 {
@@ -12,16 +9,13 @@ namespace SudokuGenerator.Commands
         public delegate string? ExecuteCommand(List<string> args, out bool success);
         private ExecuteCommand ExecuteMethod { get; }
         public string[] Aliases { get; }
-        public string HelpString { get; }
-        public ParameterInfo ParameterInfo { get; }
-        public CommandArgsInfo CommandArgsInfo { get; }
+        public CommandInfo CommandInfo { get; }
 
-        public Command(ExecuteCommand command, CommandArgsInfo commandArgsInfo, string[] aliases, string helpString)
+        public Command(ExecuteCommand command, CommandInfo commandArgsInfo, string[] aliases)
         {
             ExecuteMethod = command;
             Aliases = aliases.Select(a => a.ToLower()).ToArray();
-            HelpString = helpString;
-            CommandArgsInfo = commandArgsInfo;
+            CommandInfo = commandArgsInfo;
         }
         public bool IsAlias(string alias)
         {

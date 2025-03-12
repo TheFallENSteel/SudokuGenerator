@@ -1,8 +1,5 @@
-﻿using System;
+﻿using SudokuGenerator.Commands;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SudokuGenerator.Args
 {
@@ -13,13 +10,13 @@ namespace SudokuGenerator.Args
         [
             new ParameterInfo(
                 "Command", "string", "Command you need to help with " +
-                "\nDefault is quickGuide") 
+                "\nDefault is quickGuide")
         ]
     );
         public override void Parse(List<string> rawArgs)
         {
             rawArgs = CommandArgs.ProcessArgs(rawArgs);
-            this.CommandString = CommandArgs.ParseArg(rawArgs, 0, "quickStart");
+            this.CommandString = CommandArgs.ParseArg(rawArgs, 0, QuickStart.Aliases[0]);
         }
     }
 }

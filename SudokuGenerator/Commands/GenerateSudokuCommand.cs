@@ -1,19 +1,21 @@
-﻿using SudokuGenerator.Args;
-using SudokuSolver;
-using System;
+﻿using SudokuSolver;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace SudokuGenerator.Commands
 {
     public static class GenerateSudokuCommand
     {
-        private static readonly string[] Aliases = ["generate", "gen", "g"];
-        static GenerateSudokuCommand()
+        public static readonly string[] Aliases = ["generate", "gen", "g"];
+        private const string Name = "generate";
+        private const string ShortDescription = "Generates sudoku.";
+        private const string LongDescription = "Generates sudoku based on parameters.";
+        public static CommandInfo CommandInfo => new CommandInfo(Name, ShortDescription, LongDescription, GenerateArgs.CommandArgsInfo);
+        [ModuleInitializer]
+        public static void Init()
         {
-            Program.ProgramState.Commands.AddCommand(new Command(Execute, GenerateArgs.CommandArgsInfo, Aliases, ""));
+            Program.ProgramState.CommandContainer.AddCommand(new Command(Execute, CommandInfo, Aliases));
         }
         public static string? Execute(List<string> rawArgs, out bool success)
         {
@@ -22,6 +24,7 @@ namespace SudokuGenerator.Commands
             Stack<Sudoku> returnValue = new Stack<Sudoku>(args.GenerateCount);
             GenerateSolutions(args, returnValue);
             success = true;
+            Program.ProgramState.SudokuBuffer.AddRange(returnValue);
             return $"Generated: {returnValue.Count} Sudokus";
         }
 
@@ -34,12 +37,12 @@ namespace SudokuGenerator.Commands
             }
             Task.WaitAll(tasks.ToArray());
         }
-        private static void GenerateRandomSolved(int difficulty, Stack<Sudoku> returnValue) 
+        private static void GenerateRandomSolved(int difficulty, Stack<Sudoku> returnValue)
         {
             Sudoku? solution = null;
             lock (Program.ProgramState.SudokuSolutionBuffer)
             {
-                if (Program.ProgramState.SudokuSolutionBuffer.Count > 0) 
+                if (Program.ProgramState.SudokuSolutionBuffer.Count > 0)
                 {
                     solution = Program.ProgramState.SudokuSolutionBuffer.Pop();
                 }
@@ -47,7 +50,7 @@ namespace SudokuGenerator.Commands
             solution ??= Sudoku.GenerateRandomSolved();
             solution.UnSolve(difficulty);
             lock (returnValue)
-            { 
+            {
                 returnValue.Push(solution);
             }
         }

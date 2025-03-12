@@ -1,12 +1,6 @@
-﻿using PdfSharp;
-using PdfSharp.Charting;
-using PdfSharp.Drawing;
+﻿using PdfSharp.Drawing;
 using PdfSharp.Pdf;
-using PdfSharp.Quality;
-using PdfSharp.UniversalAccessibility.Drawing;
 using SudokuGenerator;
-using System.Diagnostics;
-using System.Net.NetworkInformation;
 
 namespace PDFGenerator
 {
@@ -37,8 +31,8 @@ namespace PDFGenerator
             PdfDocument doc = new PdfDocument();
             int sudokusPerPage = settings.RowCount * settings.ColumnCount;
             int pageCount = (printableSudokus.Length - 1) / sudokusPerPage + 1;
-            for (int i = 0; i < pageCount; i++) 
-            { 
+            for (int i = 0; i < pageCount; i++)
+            {
                 SaveSudokuPage(settings, printableSudokus, doc, i * sudokusPerPage);
             }
             if (FileDirectory != "") Directory.CreateDirectory(FileDirectory);
@@ -57,7 +51,7 @@ namespace PDFGenerator
             page.TrimMargins = settings.Margins;
             page.Size = settings.PageSize;
 
-            IPrintableSudokuDrawer[] printableSudokuDrawers = SudokuGrid.GenerateSudokuGrid(
+            PrintableSudokuDrawer[] printableSudokuDrawers = SudokuGrid.GenerateSudokuGrid(
                 printableSudokus, offset,
                 settings.ColumnCount, settings.RowCount,
                 new XPoint(page.Width.Point, page.Height.Point),
@@ -79,9 +73,9 @@ namespace PDFGenerator
         /// </summary>
         /// <param name="graphics">Object of <see cref="XGraphics"/> used to draw sudoku.</param>
         /// <param name="settings">Object of <see cref="DocumentSettings"/> used to draw sudoku.</param>
-        /// <param name="sudokuDrawer">Object of <see cref="IPrintableSudokuDrawer"/> that is used to determine location of the square.</param>
+        /// <param name="sudokuDrawer">Object of <see cref="PrintableSudokuDrawer"/> that is used to determine location of the square.</param>
         /// <param name="format">Object of <see cref="XStringFormat"/> used to draw sudoku.</param>
-        protected static void DrawSudoku(XGraphics graphics, DocumentSettings settings, XStringFormat format, IPrintableSudokuDrawer sudokuDrawer)
+        protected static void DrawSudoku(XGraphics graphics, DocumentSettings settings, XStringFormat format, PrintableSudokuDrawer sudokuDrawer)
         {
             double size = Math.Min(sudokuDrawer.RectSize.X, sudokuDrawer.RectSize.Y);
             double normalStep = (size / 9);
@@ -93,10 +87,10 @@ namespace PDFGenerator
         /// </summary>
         /// <param name="graphics">Object of <see cref="XGraphics"/> used to draw sudoku.</param>
         /// <param name="settings">Object of <see cref="DocumentSettings"/> used to draw sudoku.</param>
-        /// <param name="sudokuDrawer">Object of <see cref="IPrintableSudokuDrawer"/> that is used to determine location of the square.</param>
+        /// <param name="sudokuDrawer">Object of <see cref="PrintableSudokuDrawer"/> that is used to determine location of the square.</param>
         /// <param name="size">Size of the final sudoku area.</param>
         /// <param name = "step" > Step of the square that is being rendered.</param>
-        protected static void DrawGrid(XGraphics graphics, DocumentSettings settings, IPrintableSudokuDrawer sudokuDrawer, double size, double step)
+        protected static void DrawGrid(XGraphics graphics, DocumentSettings settings, PrintableSudokuDrawer sudokuDrawer, double size, double step)
         {
             XPen gridPen = settings.GridMinorPen;
             double minorStep = step / 3;
@@ -120,7 +114,7 @@ namespace PDFGenerator
             }
         }
 
-        private static void DrawNumbers(XGraphics graphics, DocumentSettings settings, IPrintableSudokuDrawer sudokuDrawer, double step, XStringFormat format)
+        private static void DrawNumbers(XGraphics graphics, DocumentSettings settings, PrintableSudokuDrawer sudokuDrawer, double step, XStringFormat format)
         {
             XFont numberFont = new XFont(settings.FontFamilyName, ((step / 2)));
             for (int j = 0; j < 9; j++)
@@ -131,7 +125,7 @@ namespace PDFGenerator
                 }
             }
         }
-        private static void DrawWhiteSpaces(XGraphics graphics, IPrintableSudokuDrawer sudokuDrawer, double step)
+        private static void DrawWhiteSpaces(XGraphics graphics, PrintableSudokuDrawer sudokuDrawer, double step)
         {
             for (int j = 0; j < 9; j++)
             {
@@ -161,13 +155,13 @@ namespace PDFGenerator
         /// </summary>
         /// <param name="graphics">Object of <see cref="XGraphics"/> used to draw sudoku.</param>
         /// <param name="settings">Object of <see cref="DocumentSettings"/> used to draw sudoku.</param>
-        /// <param name="sudokuDrawer">Object of <see cref="IPrintableSudokuDrawer"/> that is used to determine location of the square.</param>
+        /// <param name="sudokuDrawer">Object of <see cref="PrintableSudokuDrawer"/> that is used to determine location of the square.</param>
         /// <param name="format">Object of <see cref="XStringFormat"/> used to draw sudoku.</param>
         /// <param name="numberFont"><see cref="XFont"/> of the number to be rendered.</param>
         ///<param name = "step" > Step of the square that is being rendered.</param>
         /// <param name="i">Current X offset of the square.</param>
         /// <param name="j">Current Y offset of the square.</param>
-        protected static void DrawNumber(XGraphics graphics, DocumentSettings settings, IPrintableSudokuDrawer sudokuDrawer, double step, XStringFormat format, XFont numberFont, int i, int j)
+        protected static void DrawNumber(XGraphics graphics, DocumentSettings settings, PrintableSudokuDrawer sudokuDrawer, double step, XStringFormat format, XFont numberFont, int i, int j)
         {
             XPoint location = new XPoint(sudokuDrawer.Offset.X + i * step + step / 2, sudokuDrawer.Offset.Y + j * step + step / 2);
             int number = sudokuDrawer.Sudoku.Data[i + j * sudokuDrawer.Sudoku.Size];
@@ -182,11 +176,11 @@ namespace PDFGenerator
         /// Draws white space to ensure good looking squares for printed spaces.
         /// </summary>
         /// <param name="graphics">Object of <see cref="XGraphics"/>used to draw sudoku.</param>
-        /// <param name="sudokuDrawer">Object of <see cref="IPrintableSudokuDrawer"/> that is used to determine location of the square.</param>
+        /// <param name="sudokuDrawer">Object of <see cref="PrintableSudokuDrawer"/> that is used to determine location of the square.</param>
         /// <param name="step">Step of the square that is being rendered.</param>
         /// <param name="i">Current X offset of the square.</param>
         /// <param name="j">Current Y offset of the square.</param>
-        protected static void DrawWhiteSpace(XGraphics graphics, IPrintableSudokuDrawer sudokuDrawer, double step, int i, int j)
+        protected static void DrawWhiteSpace(XGraphics graphics, PrintableSudokuDrawer sudokuDrawer, double step, int i, int j)
         {
             XPoint location = new XPoint(sudokuDrawer.Offset.X + i * step + step / 2, sudokuDrawer.Offset.Y + j * step + step / 2);
             int number = sudokuDrawer.Sudoku.Data[i + j * sudokuDrawer.Sudoku.Size];

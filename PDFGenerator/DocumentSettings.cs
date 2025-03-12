@@ -1,18 +1,14 @@
 ﻿using PdfSharp;
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PDFGenerator
 {
     public class DocumentSettings(int rowCount, int columnCount, TrimMargins margins, XPoint sudokuGap, string fontFamilyName, XPen gridMinorPen, XPen gridStandardPen, XPen gridBoxDividerPen, XPen gridOuterBrush, XBrush fontBrush, PageSize pageSize = PageSize.A4, string name = "OutputFile.pdf")
     {
         public DocumentSettings(int rowCount, int columnCount, PageSize pageSize = PageSize.A4, string name = "OutputFile.pdf") :
-            this(rowCount, columnCount, new TrimMargins() { All = new XUnit(25), Top = new XUnit(50) }, new XPoint(5, 5), "Arial", new XPen(XPens.LightGray) { Width = 0.25, LineCap = XLineCap.Square }, new XPen(XPens.Black) { Width = 0.5, LineCap = XLineCap.Square }, new XPen(XPens.Black) { Width = 1.5, LineCap = XLineCap.Square }, new XPen(XPens.Black) { Width = 2.5, LineCap = XLineCap.Square }, XBrushes.Black, pageSize, name) { }
+            this(rowCount, columnCount, new TrimMargins() { All = new XUnit(25), Top = new XUnit(50) }, new XPoint(5, 5), "Arial", new XPen(XPens.LightGray) { Width = 0.25, LineCap = XLineCap.Square }, new XPen(XPens.Black) { Width = 0.5, LineCap = XLineCap.Square }, new XPen(XPens.Black) { Width = 1.5, LineCap = XLineCap.Square }, new XPen(XPens.Black) { Width = 2.5, LineCap = XLineCap.Square }, XBrushes.Black, pageSize, name)
+        { }
 
         public XPen GridMinorPen { get; set; } = gridMinorPen;
         public XPen GridStandardPen { get; set; } = gridStandardPen;

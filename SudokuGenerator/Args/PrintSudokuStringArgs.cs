@@ -1,12 +1,4 @@
-﻿using PdfSharp;
-using System;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.IO;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace SudokuGenerator.Args
 {
@@ -14,7 +6,7 @@ namespace SudokuGenerator.Args
     {
         public bool Raw { get; private set; }
 
-        public static CommandArgsInfo CommandArgsInfoget{get; } = new CommandArgsInfo([
+        public static CommandArgsInfo CommandArgsInfo { get; } = new CommandArgsInfo([
                 new ParameterInfo(
                     "Raw",
                     "bool",

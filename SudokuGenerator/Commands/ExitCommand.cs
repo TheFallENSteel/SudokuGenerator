@@ -1,19 +1,22 @@
 ﻿using SudokuGenerator.Args;
-using SudokuSolver;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
 
 namespace SudokuGenerator.Commands
 {
     public static class ExitCommand
     {
-        private static readonly string[] Aliases = ["exit", "ex", "e", "stop", "terminate", "end", "quit", "leave", "q"];
-        static ExitCommand()
+        public static readonly string[] Aliases = ["exit", "ex", "e", "stop", "terminate", "end", "quit", "leave", "q"];
+        private const string Name = "exit";
+        private const string ShortDescription = "Exits the program.";
+        private const string LongDescription = "Used to exit the program after user confirmation.";
+        public static CommandInfo CommandInfo => new CommandInfo(Name, ShortDescription, LongDescription, EmptyArgs.CommandArgsInfo);
+
+        [ModuleInitializer]
+        public static void Init()
         {
-            Program.ProgramState.Commands.AddCommand(new Command(Execute, EmptyArgs.CommandArgsInfo, Aliases, "Quit the generator."));
+            Program.ProgramState.CommandContainer.AddCommand(new Command(Execute, CommandInfo, Aliases));
         }
         public static string? Execute(List<string> rawArgs, out bool success)
         {

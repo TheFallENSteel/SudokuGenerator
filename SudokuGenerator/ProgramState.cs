@@ -6,9 +6,9 @@ namespace SudokuGenerator
 {
     public class ProgramState
     {
-        public CommandsContainer Commands { get; } = new CommandsContainer();
+        public CommandsContainer CommandContainer { get; } = new CommandsContainer();
         public List<Sudoku> SudokuBuffer { get; } = new List<Sudoku>();
         public Stack<Sudoku> SudokuSolutionBuffer { get; } = new Stack<Sudoku>();
-        public bool Continue { get; set; }
+        public bool Continue { get; set; } = true;
     }
 }

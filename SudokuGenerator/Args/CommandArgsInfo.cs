@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 
 namespace SudokuGenerator.Args
 {
@@ -14,10 +10,10 @@ namespace SudokuGenerator.Args
         {
             ParametersHelp = parametersHelp;
         }
-
+        public string GetShortInfo() => string.Concat(ParametersHelp.Select(param => param.Name + " "));
         public string GetHelpString(int index)
         {
-            if (ParametersHelp.Length < index)
+            if (ParametersHelp.Length > index)
             {
                 return ParametersHelp[index].FullDescription;
             }
