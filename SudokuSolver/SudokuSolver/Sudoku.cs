@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace SudokuSolver
 {
@@ -23,9 +24,10 @@ namespace SudokuSolver
 
         static int totalMin = int.MaxValue;
         public const int MAX_DIFFICULTY = 4;
-        public Sudoku Solve(int difficulty)
+        public Sudoku Solve(int difficulty, bool returnUnmodifiedIfNotSolved = false)
         {
             Sudoku solution = new Sudoku(this.GetData());
+            if (this.SudokuData.GetEmptyCellsCount() > Size * Size - 17) return solution;
             while (true)
             {
                 if (solution.IsSolved()) break;
@@ -33,6 +35,7 @@ namespace SudokuSolver
                 else if (difficulty >= 2 && solution.SudokuData.CheckForNakedValues()) continue;
                 else if (difficulty >= 3 && solution.SudokuData.CheckForPointing()) continue;
                 else if (difficulty >= 4 && solution.SudokuData.CheckForClaiming()) continue;
+                else if (returnUnmodifiedIfNotSolved) return new Sudoku(this.GetData());
                 else break;
             }
             return solution;
@@ -41,8 +44,12 @@ namespace SudokuSolver
         public void UnSolve(int difficulty)
         {
             Sudoku solution = new Sudoku(this.GetData());
-            for (int i = 0; i < 81; i++)
+            int[] indexes = Enumerable.Range(0, 81).ToArray();
+            Random random = new Random();
+            random.Shuffle(indexes);
+            for (int j = 0; j < 81; j++)
             {
+                int i = indexes[j];
                 int value = solution.SudokuData.Cells[i].Value;
                 if (value != 0)
                 {
@@ -53,23 +60,6 @@ namespace SudokuSolver
             }
             this.SetSudoku(solution);
         }
-
-        /*public static (Sudoku, SudokuData?) Guess(SudokuData lastSolution, int difficulty)
-        {
-            Cell cell = lastSolution.LeastVariableUnsetCell();
-            int[] possibilities = cell.Possibilities.ToArray();
-            foreach (var possibility in possibilities)
-            {
-                Sudoku solution = new Sudoku(lastSolution.GetData());
-                solution.SudokuData.GetCell(cell.x, cell.y).TrySetValue(possibility);
-                var tempSolution = solution.Solve(difficulty, true);
-                if (tempSolution != null) 
-                { 
-                    return (solution, tempSolution);
-                }
-            }
-            return (null, null);
-        }*/
 
         public static Sudoku GenerateRandomSolved()
         {
@@ -82,6 +72,10 @@ namespace SudokuSolver
             tempSudoku = GenerateRandomSudoku(new Random(), tempSudoku);
             if (tempSudoku == null) throw new Exception("Failed to generate sudoku. Time exceeded");
             return tempSudoku;
+        }
+        public void RandomizeSudoku(Random random)
+        {
+            SudokuData.RandomTransform(SudokuData.GetRawData(), random);
         }
 
         private static Sudoku? GenerateRandomSudoku(Random random, Sudoku sudoku)

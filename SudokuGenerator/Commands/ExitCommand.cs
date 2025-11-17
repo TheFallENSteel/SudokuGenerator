@@ -25,6 +25,7 @@ namespace SudokuGenerator.Commands
             string? answer = Console.ReadLine();
             if (answer != null && answer.Trim().ToLower() != "y") return $"Continueing the program...";
             success = true;
+            Program.ProgramState.Continue = false;
             return $"See you next timeExiting the program...";
         }
     }

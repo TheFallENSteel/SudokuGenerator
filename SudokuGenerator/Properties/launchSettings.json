@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "Console": {
+      "commandName": "Project"
+    },
+    "Window": {
+      "commandName": "Project",
+      "commandLineArgs": "-window"
+    }
+  }
+}

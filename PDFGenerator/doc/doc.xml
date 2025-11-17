@@ -1,0 +1,145 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PDFGenerator</name>
+    </assembly>
+    <members>
+        <member name="T:PDFGenerator.IPrintableSudoku">
+            <summary>
+            Interface of sudoku data types eligible to be printed.
+            </summary>
+        </member>
+        <member name="P:PDFGenerator.IPrintableSudoku.Data">
+            <summary>
+            Sudoku data in format of <see cref="T:System.Int32"/> array that represents numbers in sudoku.
+            </summary>
+        </member>
+        <member name="P:PDFGenerator.IPrintableSudoku.Size">
+            <summary>
+            Size of sudoku square
+            </summary>
+        </member>
+        <member name="T:PDFGenerator.PDFGenerator">
+            <summary>
+            Class that generates PDF File that represents the sudoku.
+            <example>
+            <code>
+            //This is how you use the generator
+            PDFGenerator generator = new PDFGenerator(filePath);
+            generator.SaveSudokuDocument(settings, SomeSudokuDataClass, fileName);
+            </code>
+            </example>
+            </summary>
+            <param name="filePath"></param>
+        </member>
+        <member name="M:PDFGenerator.PDFGenerator.#ctor(System.String)">
+            <summary>
+            Class that generates PDF File that represents the sudoku.
+            <example>
+            <code>
+            //This is how you use the generator
+            PDFGenerator generator = new PDFGenerator(filePath);
+            generator.SaveSudokuDocument(settings, SomeSudokuDataClass, fileName);
+            </code>
+            </example>
+            </summary>
+            <param name="filePath"></param>
+        </member>
+        <member name="M:PDFGenerator.PDFGenerator.SaveSudokuDocument(PDFGenerator.DocumentSettings,PDFGenerator.IPrintableSudoku[],System.String)">
+            <summary>
+            Saves one sudoku document to <see cref="P:PDFGenerator.PDFGenerator.FileDirectory"/>.
+            </summary>
+            <param name="settings">Object of <see cref="T:PDFGenerator.DocumentSettings"/> used to draw sudoku.</param>
+            <param name="printableSudokus">Sudoku data to be printed.</param>
+            <param name="fileName">Name of the generated file.</param>
+        </member>
+        <member name="M:PDFGenerator.PDFGenerator.SaveSudokuPage(PDFGenerator.DocumentSettings,PDFGenerator.IPrintableSudoku[],PdfSharp.Pdf.PdfDocument,System.Int32)">
+            <summary>
+            Saves one page of sudoku document
+            </summary>
+            <param name="settings">Object of <see cref="T:PDFGenerator.DocumentSettings"/> used to draw sudoku.</param>
+            <param name="printableSudokus">Sudoku data to be printed.</param>
+            <param name="doc">Current <see cref="T:PdfSharp.Pdf.PdfDocument"/> instance.</param>
+            <param name="offset">Offset of the page.</param>
+        </member>
+        <member name="M:PDFGenerator.PDFGenerator.DrawSudoku(PdfSharp.Drawing.XGraphics,PDFGenerator.DocumentSettings,PdfSharp.Drawing.XStringFormat,PDFGenerator.PrintableSudokuDrawer)">
+            <summary>
+            Draws one sudoku.
+            </summary>
+            <param name="graphics">Object of <see cref="T:PdfSharp.Drawing.XGraphics"/> used to draw sudoku.</param>
+            <param name="settings">Object of <see cref="T:PDFGenerator.DocumentSettings"/> used to draw sudoku.</param>
+            <param name="sudokuDrawer">Object of <see cref="T:PDFGenerator.PrintableSudokuDrawer"/> that is used to determine location of the square.</param>
+            <param name="format">Object of <see cref="T:PdfSharp.Drawing.XStringFormat"/> used to draw sudoku.</param>
+        </member>
+        <member name="M:PDFGenerator.PDFGenerator.DrawGrid(PdfSharp.Drawing.XGraphics,PDFGenerator.DocumentSettings,PDFGenerator.PrintableSudokuDrawer,System.Double,System.Double)">
+            <summary>
+            Draws the sudoku grid.
+            </summary>
+            <param name="graphics">Object of <see cref="T:PdfSharp.Drawing.XGraphics"/> used to draw sudoku.</param>
+            <param name="settings">Object of <see cref="T:PDFGenerator.DocumentSettings"/> used to draw sudoku.</param>
+            <param name="sudokuDrawer">Object of <see cref="T:PDFGenerator.PrintableSudokuDrawer"/> that is used to determine location of the square.</param>
+            <param name="size">Size of the final sudoku area.</param>
+            <param name = "step" > Step of the square that is being rendered.</param>
+        </member>
+        <member name="M:PDFGenerator.PDFGenerator.DrawHeader(PdfSharp.Drawing.XGraphics,PDFGenerator.DocumentSettings,PdfSharp.Drawing.XStringFormat,System.Double,System.String)">
+            <summary>
+            Draws string as header of the file.
+            </summary>
+            <param name="graphics">Object of <see cref="T:PdfSharp.Drawing.XGraphics"/> used to draw sudoku.</param>
+            <param name="settings">Object of <see cref="T:PDFGenerator.DocumentSettings"/> used to draw sudoku.</param>
+            <param name="format">Object of <see cref="T:PdfSharp.Drawing.XStringFormat"/> used to draw sudoku.</param>
+            <param name="pageWidth">Width of the page.</param>
+            <param name="headerString">String representing the header.</param>
+        </member>
+        <member name="M:PDFGenerator.PDFGenerator.DrawNumber(PdfSharp.Drawing.XGraphics,PDFGenerator.DocumentSettings,PDFGenerator.PrintableSudokuDrawer,System.Double,PdfSharp.Drawing.XStringFormat,PdfSharp.Drawing.XFont,System.Int32,System.Int32)">
+             <summary>
+             Draws square with correct number.
+             </summary>
+             <param name="graphics">Object of <see cref="T:PdfSharp.Drawing.XGraphics"/> used to draw sudoku.</param>
+             <param name="settings">Object of <see cref="T:PDFGenerator.DocumentSettings"/> used to draw sudoku.</param>
+             <param name="sudokuDrawer">Object of <see cref="T:PDFGenerator.PrintableSudokuDrawer"/> that is used to determine location of the square.</param>
+             <param name="format">Object of <see cref="T:PdfSharp.Drawing.XStringFormat"/> used to draw sudoku.</param>
+             <param name="numberFont"><see cref="T:PdfSharp.Drawing.XFont"/> of the number to be rendered.</param>
+            <param name = "step" > Step of the square that is being rendered.</param>
+             <param name="i">Current X offset of the square.</param>
+             <param name="j">Current Y offset of the square.</param>
+        </member>
+        <member name="M:PDFGenerator.PDFGenerator.DrawWhiteSpace(PdfSharp.Drawing.XGraphics,PDFGenerator.PrintableSudokuDrawer,System.Double,System.Int32,System.Int32)">
+            <summary>
+            Draws white space to ensure good looking squares for printed spaces.
+            </summary>
+            <param name="graphics">Object of <see cref="T:PdfSharp.Drawing.XGraphics"/>used to draw sudoku.</param>
+            <param name="sudokuDrawer">Object of <see cref="T:PDFGenerator.PrintableSudokuDrawer"/> that is used to determine location of the square.</param>
+            <param name="step">Step of the square that is being rendered.</param>
+            <param name="i">Current X offset of the square.</param>
+            <param name="j">Current Y offset of the square.</param>
+        </member>
+        <member name="T:PDFGenerator.PrintableSudokuDrawer">
+            <summary>
+            Data for drawing sudokus.
+            </summary>
+        </member>
+        <member name="M:PDFGenerator.PrintableSudokuDrawer.#ctor(PDFGenerator.IPrintableSudoku,PdfSharp.Drawing.XPoint,PdfSharp.Drawing.XPoint)">
+            <summary>
+            Data for drawing sudokus.
+            </summary>
+        </member>
+        <member name="T:SudokuGenerator.SudokuGrid">
+            <summary>
+            Provides methods to generate and draw Sudoku grids.
+            </summary>
+        </member>
+        <member name="M:SudokuGenerator.SudokuGrid.GenerateSudokuGrid(PDFGenerator.IPrintableSudoku[],System.Int32,System.Int32,System.Int32,PdfSharp.Drawing.XPoint,PdfSharp.Drawing.XPoint)">
+            <summary>
+            Prepares document pages for drawing the grid of Sudokus.
+            </summary>
+            <param name="sudoku">Array of Sudoku instances to be drawn.</param>
+            <param name="offset">Offset to start drawing from the Sudoku array.</param>
+            <param name="columnCount">Number of Sudokus in a row.</param>
+            <param name="rowCount">Number of Sudokus in a column.</param>
+            <param name="rectangle">Area for drawing the Sudokus.</param>
+            <param name="spaceBetween">Gap between each Sudoku instance.</param>
+            <returns>Returns an array of <see cref="T:PDFGenerator.PrintableSudokuDrawer"/> instances to be used for drawing.</returns>
+        </member>
+    </members>
+</doc>

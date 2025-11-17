@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SudokuSolver", "SudokuSolve
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDFGenerator", "PDFGenerator\PDFGenerator.csproj", "{DE942036-75C8-4846-919D-6316611A0E77}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphicalInterface", "GraphicalInterface\GraphicalInterface.csproj", "{852C0B3C-99B3-4425-9137-553CCB2A8573}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{DE942036-75C8-4846-919D-6316611A0E77}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE942036-75C8-4846-919D-6316611A0E77}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE942036-75C8-4846-919D-6316611A0E77}.Release|Any CPU.Build.0 = Release|Any CPU
+		{852C0B3C-99B3-4425-9137-553CCB2A8573}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{852C0B3C-99B3-4425-9137-553CCB2A8573}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{852C0B3C-99B3-4425-9137-553CCB2A8573}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{852C0B3C-99B3-4425-9137-553CCB2A8573}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

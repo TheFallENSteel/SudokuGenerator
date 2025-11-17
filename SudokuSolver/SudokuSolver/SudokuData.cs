@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace SudokuSolver
@@ -20,7 +21,7 @@ namespace SudokuSolver
             GenerateGrid();
             if (!toBeValidated && !SetData(data))
             {
-                throw new Exception("Invalid Sudoku data");
+                throw new InvalidDataException("Invalid Sudoku data");
             }
         }
 
@@ -136,6 +137,7 @@ namespace SudokuSolver
         public Container GetColumn(int column) => RowContainers[column];
         public Container GetSquare(int squareX, int squareY) => RowContainers[squareX + squareY * SquareSize];
         public Cell GetCell(int cellX, int cellY) => Cells[cellX + cellY * Size];
+        private static int GetCellIndex(int cellX, int cellY) => cellX + cellY * Size;
         public bool IsSolved()
         {
             return RowContainers.All(row => row.IsSolved())
@@ -198,6 +200,69 @@ namespace SudokuSolver
                 }
             }
             return returnValue;
+        }
+
+        public static int[] FlipData(int[] data)
+        {
+            int[] flippedData = new int[Size * Size];
+            for (int i = 0; i < Size; i++)
+            {
+                for (int j = 0; j < Size; j++)
+                {
+                    flippedData[GetCellIndex(i, j)] = data[GetCellIndex(Size - i - 1, Size - j - 1)];
+                }
+            }
+            return flippedData;
+        }
+        public static int[] Mirror(int[] data, bool xAxis)
+        {
+            int[] flippedData = new int[Size * Size];
+            for (int i = 0; i < Size; i++)
+            {
+                for (int j = 0; j < Size; j++)
+                {
+                    flippedData[GetCellIndex(i, j)] = xAxis ? data[GetCellIndex(Size - i - 1, j)] : data[GetCellIndex(i, Size - j - 1)];
+                }
+            }
+            return flippedData;
+        }
+        public static int[] SwapNumbers(int[] data, int[] dictionary) //Nine numbers
+        {
+            int[] flippedData = new int[Size * Size];
+            for (int i = 0; i < Size; i++)
+            {
+                for (int j = 0; j < Size; j++)
+                {
+                    if (data[GetCellIndex(i, j)] != 0) flippedData[GetCellIndex(i, j)] = dictionary[data[GetCellIndex(i, j)] - 1];
+                }
+            }
+            return flippedData;
+        }
+        public static int[] SwapRowsColumns(int[] data, int[] dictionaryRows, int[] dictionaryColumns) //Three numbers
+        {
+            int[] flippedData = new int[Size * Size];
+            for (int i = 0; i < Size; i++)
+            {
+                for (int j = 0; j < Size; j++)
+                {
+                    int xIndex = dictionaryRows[(i / 3)] * 3 + (i % 3);
+                    int yIndex = dictionaryColumns[(j / 3)] * 3 + (j % 3);
+                    flippedData[GetCellIndex(i, j)] = data[GetCellIndex(xIndex, yIndex)];
+                }
+            }
+            return flippedData;
+        }
+        public static int[] RandomTransform(int[] data, Random random) //Three numbers
+        {
+            int[] rowShuffle = [0, 1, 2];
+            int[] columnShuffle = [0, 1, 2];
+            int[] swapNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+            random.Shuffle(rowShuffle);
+            random.Shuffle(columnShuffle);
+            random.Shuffle(swapNumbers);
+            int[] flippedData = SwapRowsColumns(SwapNumbers(Mirror(Mirror(FlipData(data), true), true), swapNumbers), rowShuffle, columnShuffle);
+            return flippedData;
         }
     }
 }
